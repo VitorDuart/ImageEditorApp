@@ -16,7 +16,9 @@ class _EditorState extends State<Editor> {
   final int _indexSlider = 1;
   Slider _opacitySlider;
 
-  _EditorState() {
+  @override
+  void initState() {
+    super.initState();
     _widgetBody = <Widget>[
       Opacity(
         opacity: _value,
@@ -55,7 +57,8 @@ class _EditorState extends State<Editor> {
                   if (this._widgetBody.length == _indexSlider)
                     this._widgetBody.add(_opacitySlider);
                   else
-                    this._widgetBody.removeAt(_indexSlider);
+                    this._opacitySlider =
+                        this._widgetBody.removeAt(_indexSlider);
                 });
               },
               icon: Icon(Icons.opacity),
