@@ -20,5 +20,10 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
+  
+  assets:
+    - images/dash.jpg
+    - images/dash1.jpg
+    - images/dash2.jpeg
+    - images/dash3.png
