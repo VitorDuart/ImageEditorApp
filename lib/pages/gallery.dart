@@ -33,8 +33,8 @@ class Gallery extends StatelessWidget {
         onPressed: () => nav(images['dash2']),
       );
       ElevatedButton dash3 = ElevatedButton(
-        child: images['dash2'],
-        onPressed: () => nav(images['dash23']),
+        child: images['dash3'],
+        onPressed: () => nav(images['dash3']),
       );
 
       listImages.add(dash);
