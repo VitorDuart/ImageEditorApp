@@ -15,8 +15,17 @@ class _EditorState extends State<Editor> {
   double _blurValue = 0;
   bool _activedOpacity = false;
   bool _activedBlur = false;
+  bool _activedPaint = false;
   double _visibleSliderOpacity = 0;
   double _visibleSliderBlur = 0;
+  List<Offset> _offsets;
+  GlobalKey _paintKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _offsets = <Offset>[];
+  }
 
   void _activeOpacity() {
     _activedOpacity = !_activedOpacity ? true : false;
@@ -32,6 +41,12 @@ class _EditorState extends State<Editor> {
     });
   }
 
+  void _activePaint() {
+    setState(() {
+      _activedPaint = !_activedPaint;
+    });
+  }
+
   void _changeOpacity(newValue) {
     setState(() {
       _opacityValue = newValue;
@@ -41,6 +56,14 @@ class _EditorState extends State<Editor> {
   void _changeBlur(newValue) {
     setState(() {
       _blurValue = newValue;
+    });
+  }
+
+  void _paint(PointerMoveEvent event) {
+    RenderBox referenceBox = _paintKey.currentContext.findRenderObject();
+    Offset offset = referenceBox.globalToLocal(event.position);
+    setState(() {
+      _offsets.add(offset);
     });
   }
 
@@ -96,6 +119,25 @@ class _EditorState extends State<Editor> {
                           onChanged: _changeOpacity)),
             ),
           ),
+          _activedPaint
+              ? Listener(
+                  onPointerMove: _paint,
+                  child: CustomPaint(
+                    key: _paintKey,
+                    painter: PaintPoint(offsets: _offsets),
+                    child: Container(),
+                  ),
+                )
+              : AbsorbPointer(
+                  child: Listener(
+                    onPointerMove: _paint,
+                    child: CustomPaint(
+                      key: _paintKey,
+                      painter: PaintPoint(offsets: _offsets),
+                      child: Container(),
+                    ),
+                  ),
+                ),
         ],
       ),
       bottomNavigationBar: Container(
@@ -103,9 +145,10 @@ class _EditorState extends State<Editor> {
         padding: EdgeInsets.all(10.0),
         margin: const EdgeInsets.only(top: 10.0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
-                padding: const EdgeInsets.only(right: 20),
+                padding: const EdgeInsets.only(right: 15, left: 10),
                 child: ElevatedButton.icon(
                   icon: Icon(Icons.opacity),
                   label: Text('Opacity'),
@@ -116,19 +159,56 @@ class _EditorState extends State<Editor> {
                   onPressed: _activeOpacity, //_applyEffectOpacity,
                 )),
             Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.blur_on),
-                  label: Text('Blur'),
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                  ),
-                  onPressed: _activeBlur, //_applyEffectBlur,
-                )),
+              padding: const EdgeInsets.only(right: 10),
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.blur_on),
+                label: Text('Blur'),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                ),
+                onPressed: _activeBlur, //_applyEffectBlur,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 0),
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.format_paint_outlined),
+                label: Text('Paint'),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                ),
+                onPressed: _activePaint, //_applyEffectBlur,
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class PaintPoint extends CustomPainter {
+  PaintPoint({this.offsets});
+
+  List<Offset> offsets;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (this.offsets.isEmpty) return;
+
+    var paint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 10
+      ..strokeCap = StrokeCap.square;
+    for (Offset x in offsets) {
+      canvas.drawLine(x, x, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

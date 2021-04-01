@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imageeditorapp/pages/gallery.dart';
 //import 'package:imageeditorapp/pages/state_test.dart';
+//import 'package:imageeditorapp/pages/custompaint.dart';
 
 class App extends StatelessWidget {
   @override
@@ -14,6 +15,7 @@ class App extends StatelessWidget {
             Theme.of(context).primaryTextTheme.apply(bodyColor: Colors.white),
       ),
       home: Gallery(),
+      //home: DrawPoint(),
     );
   }
 }
