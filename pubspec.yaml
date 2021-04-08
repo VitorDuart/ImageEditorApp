@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  permission_handler: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -23,7 +24,5 @@ flutter:
   uses-material-design: true
   
   assets:
-    - images/dash.jpg
-    - images/dash1.jpg
-    - images/dash2.jpeg
-    - images/dash3.png
+    - assets/images/
+    

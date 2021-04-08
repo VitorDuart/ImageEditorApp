@@ -28,14 +28,14 @@ class _EditorState extends State<Editor> {
   }
 
   void _activeOpacity() {
-    _activedOpacity = !_activedOpacity ? true : false;
+    _activedOpacity = !_activedOpacity;
     setState(() {
       _visibleSliderOpacity = _activedOpacity ? 1 : 0;
     });
   }
 
   void _activeBlur() {
-    _activedBlur = !_activedBlur ? true : false;
+    _activedBlur = !_activedBlur;
     setState(() {
       _visibleSliderBlur = _activedBlur ? 1 : 0;
     });
@@ -81,44 +81,6 @@ class _EditorState extends State<Editor> {
             filter: ui.ImageFilter.blur(sigmaX: _blurValue, sigmaY: _blurValue),
             child: Container(color: Colors.white.withOpacity(0.0)),
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Opacity(
-              opacity: _visibleSliderBlur,
-              child: _activedBlur
-                  ? Slider(
-                      min: 0,
-                      max: 10,
-                      value: _blurValue,
-                      onChanged: _changeBlur)
-                  : AbsorbPointer(
-                      child: Slider(
-                          min: 0,
-                          max: 10,
-                          value: _blurValue,
-                          onChanged: _changeBlur)),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Opacity(
-              opacity: _visibleSliderOpacity,
-              child: _activedOpacity
-                  ? Slider(
-                      min: 0,
-                      max: 1,
-                      value: _opacityValue,
-                      onChanged: _changeOpacity)
-                  : AbsorbPointer(
-                      child: Slider(
-                          min: 0,
-                          max: 1,
-                          value: _opacityValue,
-                          onChanged: _changeOpacity)),
-            ),
-          ),
           _activedPaint
               ? Listener(
                   onPointerMove: _paint,
@@ -138,6 +100,44 @@ class _EditorState extends State<Editor> {
                     ),
                   ),
                 ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: Opacity(
+              opacity: _visibleSliderOpacity,
+              child: _activedOpacity
+                  ? Slider(
+                      min: 0,
+                      max: 1,
+                      value: _opacityValue,
+                      onChanged: _changeOpacity)
+                  : AbsorbPointer(
+                      child: Slider(
+                          min: 0,
+                          max: 1,
+                          value: _opacityValue,
+                          onChanged: _changeOpacity)),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Opacity(
+              opacity: _visibleSliderBlur,
+              child: _activedBlur
+                  ? Slider(
+                      min: 0,
+                      max: 10,
+                      value: _blurValue,
+                      onChanged: _changeBlur)
+                  : AbsorbPointer(
+                      child: Slider(
+                          min: 0,
+                          max: 10,
+                          value: _blurValue,
+                          onChanged: _changeBlur)),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: Container(
